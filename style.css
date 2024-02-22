@@ -15,7 +15,7 @@ body {
   padding: 0.5vh;
   display: grid;
   grid-template-columns: repeat(10, auto);
-  gap: 0.5vh
+  gap: 0.5vh;
 }
 
 .grid > div {
@@ -29,6 +29,26 @@ body {
   background-color: #f114d4;
 }
 
-.grid .J {
+.grid .L {
   background-color: #f1ed14;
+}
+
+.grid .J {
+  background-color: #f18214;
+}
+
+.grid .I {
+  background-color: #14f131;
+}
+
+.grid .S {
+  background-color: #747aec;
+}
+
+.grid .Z {
+  background-color: #e86991;
+}
+
+.grid .T {
+  background-color: #14f1ea;
 }
