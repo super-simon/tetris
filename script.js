@@ -1,3 +1,4 @@
+const scoreElement = document.querySelector(".score");
 const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
 const TETROMINO_NAMES = ["O", "J", "L", "I", "S", "Z", "T"];
@@ -50,6 +51,27 @@ function getRandomElement(array) {
 
 let playfield;
 let tetromino;
+let score = 0;
+
+function countScore(destroyRows) {
+  console.log("countScore");
+  switch (destroyRows) {
+    case 1:
+      score += 40;
+      break;
+    case 2:
+      score += 100;
+      break;
+    case 3:
+      score += 300;
+      break;
+    case 4:
+      score += 1200;
+      break;
+  }
+  console.log(score, scoreElement.innerHtml);
+  scoreElement.innerHTML = score;
+}
 
 function generatePlayField() {
   for (let i = 0; i < PLAYFIELD_ROWS * PLAYFIELD_COLUMNS; i++) {
@@ -88,9 +110,11 @@ function placeTetromino() {
 
   const filledRows = findFilledRows();
   removeFilledRows(filledRows);
-
   generateTetromino();
+  countScore(filledRows.length);
+  console.log(filledRows, filledRows.length, score);
 }
+
 function removeFilledRows(filledRows) {
   for (let i = 0; i < filledRows.length; i++) {
     const row = filledRows[i];
