@@ -17,6 +17,7 @@ body {
   margin-left: 100px;
   font-size: 2em;
   font-family: Arial;
+  user-select: none;
 }
 
 .overlay {
