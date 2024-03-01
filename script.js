@@ -202,6 +202,9 @@ function onkeyDown(e) {
 
   if (!isPaused) {
     switch (e.key) {
+      case " ":
+        dropTetrominoDown();
+        break;
       case "ArrowUp":
         rotate();
         break;
@@ -217,6 +220,13 @@ function onkeyDown(e) {
     }
   }
   draw();
+}
+
+function dropTetrominoDown() {
+  while (isValid()) {
+    tetromino.row++;
+  }
+  tetromino.row--;
 }
 
 function rotate() {
