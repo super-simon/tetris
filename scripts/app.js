@@ -1,9 +1,17 @@
-const PLAYFIELD_COLUMNS = 10;
-const PLAYFIELD_ROWS = 20;
+import {
+  PLAYFIELD_COLUMNS,
+  PLAYFIELD_ROWS,
+  TETROMINO_NAMES,
+  TETROMINOES,
+} from "./configs.js";
 const btnRestart = document.querySelector(".btn-restart");
 const scoreElement = document.querySelector(".score");
 const overlay = document.querySelector(".overlay");
 const gameGrid = document.querySelector(".grid");
+const hoursElement = document.querySelector(".hours");
+const minutesElement = document.querySelector(".minutes");
+const secondsElement = document.querySelector(".seconds");
+
 let isGameOver = false;
 let timedId = null;
 let isPaused = false;
@@ -11,48 +19,34 @@ let playfield;
 let tetromino;
 let cells;
 let score = 0;
-const TETROMINO_NAMES = ["O", "J", "L", "I", "S", "Z", "T"];
-const TETROMINOES = {
-  O: [
-    [1, 1],
-    [1, 1],
-  ],
-  J: [
-    [1, 0, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-  L: [
-    [0, 0, 1],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-  I: [
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ],
-  S: [
-    [0, 1, 1],
-    [1, 1, 0],
-    [0, 0, 0],
-  ],
-  Z: [
-    [1, 1, 0],
-    [0, 1, 1],
-    [0, 0, 0],
-  ],
-  T: [
-    [1, 1, 1],
-    [0, 1, 0],
-    [0, 0, 0],
-  ],
-};
+let duration = 0;
+let startedAt = new Date();
+
+function displayDuration() {
+  if (!isPaused) {
+    const now = new Date();
+    duration += now - startedAt;
+    startedAt = now;
+    const hours = Math.floor(duration / 60 / 60 / 1000);
+    const minutes = Math.floor((duration - hours * 60) / 60 / 1000);
+    const seconds = Math.floor((duration - hours * 60 * 1000) / 1000);
+
+    hoursElement.innerHTML = String(hours).padStart(2, "0");
+    minutesElement.innerHTML = String(minutes).padStart(2, "0");
+    secondsElement.innerHTML = String(seconds).padStart(2, "0");
+  } else {
+    startedAt = new Date();
+  }
+  requestAnimationFrame(displayDuration);
+}
+
+requestAnimationFrame(displayDuration);
 
 function init() {
   isGameOver = false;
   score = 0;
+  duration = 0;
+  startedAt = new Date();
   scoreElement.innerHTML = 0;
   generatePlayField();
   generateTetromino();
