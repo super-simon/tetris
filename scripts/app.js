@@ -4,9 +4,12 @@ import {
   TETROMINO_NAMES,
   TETROMINOES,
 } from "./configs.js";
-const btnRestart = document.querySelector(".btn-restart");
+const btnRestart = document.querySelectorAll(".btn-restart");
+const btnPause = document.querySelector(".btn-pause");
+const btnResume = document.querySelector(".btn-resume");
 const scoreElement = document.querySelector(".score");
-const overlay = document.querySelector(".overlay");
+const gameOverOverlay = document.querySelector(".game-over-overlay");
+const pauseOverlay = document.querySelector(".pause-overlay");
 const gameGrid = document.querySelector(".grid");
 const hoursElement = document.querySelector(".hours");
 const minutesElement = document.querySelector(".minutes");
@@ -21,6 +24,7 @@ let cells;
 let score = 0;
 let duration = 0;
 let startedAt = new Date();
+let level = 1;
 
 function displayDuration() {
   if (!isPaused) {
@@ -44,9 +48,11 @@ requestAnimationFrame(displayDuration);
 
 function init() {
   isGameOver = false;
+  isPaused = false;
   score = 0;
   duration = 0;
   startedAt = new Date();
+  level = 1;
   scoreElement.innerHTML = 0;
   generatePlayField();
   generateTetromino();
@@ -55,10 +61,16 @@ function init() {
 }
 init();
 
-btnRestart.addEventListener("click", function () {
+function restart() {
+  console.log("restart");
   gameGrid.innerHTML = "";
   init();
-  overlay.style.display = "none";
+  gameOverOverlay.style.display = "none";
+  pauseOverlay.style.display = "none";
+}
+
+btnRestart.forEach(function (btn) {
+  btn.addEventListener("click", restart);
 });
 
 function convertPositionToIndex(row, column) {
@@ -306,7 +318,7 @@ function moveDown() {
 }
 
 function gameOver() {
-  overlay.style.display = "flex";
+  gameOverOverlay.style.display = "flex";
 }
 
 function startLoop() {
@@ -324,13 +336,19 @@ function stopLoop() {
 }
 
 function togglePauseGame() {
+  console.log("isPaused in togglePauseGame", isPaused);
   if (!isPaused) {
     stopLoop();
+    pauseOverlay.style.display = "flex";
   } else {
+    pauseOverlay.style.display = "none";
     startLoop();
   }
   isPaused = !isPaused;
 }
+
+btnPause.addEventListener("click", togglePauseGame);
+btnResume.addEventListener("click", togglePauseGame);
 
 function isValid() {
   const matrixSize = tetromino.matrix.length;
